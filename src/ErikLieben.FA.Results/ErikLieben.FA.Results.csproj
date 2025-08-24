@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <DebugType>portable</DebugType>
+
+        <!-- NuGet package metadata -->
+        <PackageId>ErikLieben.FA.Results</PackageId>
+        <PackageVersion Condition="'$(PackageVersion)' == '' and '$(Version)' != ''">$(Version)</PackageVersion>
+        <Title>ErikLieben.FA.Results</Title>
+        <Authors>Erik Lieben</Authors>
+        <Company>Erik Lieben</Company>
+        <Description>A lightweight, allocation-friendly Result type for .NET that makes success/failure flow explicit, composable, and ergonomic.</Description>
+        <PackageTags>result;domain;dotnet;csharp</PackageTags>
+        <RepositoryUrl>https://github.com/eriklieben/ErikLieben.FA.Results</RepositoryUrl>
+
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+        <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
+        <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
+
+        <!-- Symbol package settings -->
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\\..\\README.md" Pack="true" PackagePath="" />
+        <None Include="..\\..\\LICENSE" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>
