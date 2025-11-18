@@ -295,14 +295,53 @@ if (combined.IsSuccess)
 
 ## 🌐 ASP.NET Core Integration
 
+### Minimal APIs with Strongly-Typed Results
+
+The library uses `TypedResults` for compile-time type safety and automatic OpenAPI documentation:
+
+```csharp
+using Microsoft.AspNetCore.Http.HttpResults;
+
+app.MapPost("/users", CreateUser).WithName("CreateUser");
+
+// Return type is strongly-typed: Results<Created<ApiResponse<User>>, BadRequest<ApiResponse<User>>>
+static Results<Created<ApiResponse<User>>, BadRequest<ApiResponse<User>>> CreateUser(CreateUserDto dto)
+{
+    var result = ValidateAndCreateUser(dto);
+    return result.ToCreatedHttpResult(
+        location: "/users/123",
+        successMessage: "User created successfully"
+    );
+}
+
+// Standard CRUD operations
+app.MapGet("/users/{id}", GetUser);
+
+static Results<Ok<ApiResponse<User>>, BadRequest<ApiResponse<User>>> GetUser(string id)
+{
+    var result = FindUserById(id);
+    return result.ToHttpResult(
+        successMessage: "User retrieved successfully"
+    );
+}
+```
+
+**Benefits:**
+- ✅ **Type Safety** - Compiler knows exact response types
+- ✅ **OpenAPI Documentation** - Swagger automatically documents response schemas
+- ✅ **Better IntelliSense** - IDE autocomplete for response types
+- ✅ **Testability** - Assert on specific result types in tests
+
 ### Controller-Based APIs
+
+For traditional MVC controllers, use `ResultApiExtensions`:
 
 ```csharp
 [HttpPost]
 public IActionResult CreateUser(CreateUserDto dto)
 {
     Result<User> result = ValidateAndCreateUser(dto);
-    
+
     return result.ToCreatedAtActionResult(
         actionName: nameof(GetUser),
         controllerName: "Users",
@@ -311,22 +350,6 @@ public IActionResult CreateUser(CreateUserDto dto)
     );
     // 201 Created with user data on success
     // 400 Bad Request with validation errors on failure
-}
-```
-
-### Minimal APIs
-
-```csharp
-app.MapPost("/users", CreateUser).WithName("CreateUser");
-
-static IResult CreateUser(CreateUserDto dto)
-{
-    var result = ValidateAndCreateUser(dto);
-    return result.ToCreatedAtRouteResult(
-        routeName: "GetUser",
-        routeValues: new { id = result.IsSuccess ? result.Value.Id : null },
-        successMessage: "User created successfully"
-    );
 }
 ```
 
@@ -545,16 +568,17 @@ static Result<string> ValidateEmailFormat(string email)
         : Result<string>.Failure("Invalid email format", "Email");
 }
 
-// API endpoint
-app.MapPost("/users", (CreateUserDto dto) =>
+// API endpoint - returns strongly-typed result
+app.MapPost("/users", CreateUserEndpoint).WithName("CreateUser");
+
+static Results<Created<ApiResponse<User>>, BadRequest<ApiResponse<User>>> CreateUserEndpoint(CreateUserDto dto)
 {
     var result = ValidateAndCreateUser(dto);
-    return result.ToCreatedAtRouteResult(
-        routeName: "GetUser",
-        routeValues: new { id = result.IsSuccess ? result.Value.Id : null },
+    return result.ToCreatedHttpResult(
+        location: $"/users/{result.Value?.Id}",
         successMessage: "User created successfully"
     );
-});
+}
 ```
 
 ## 🧪 Testing
