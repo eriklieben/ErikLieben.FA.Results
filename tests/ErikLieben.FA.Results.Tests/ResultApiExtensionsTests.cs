@@ -41,6 +41,32 @@ public class ResultApiExtensionsTests
             Assert.Equal("A", response.Errors![0].PropertyName);
             Assert.Equal("bad", response.Message);
         }
+
+        [Fact]
+        public void Should_wrap_multiple_failures_into_api_response()
+        {
+            // Arrange - Test optimized for loop iteration with multiple errors
+            var sut = Result<int>.Failure(new[]
+            {
+                Err("error1", "Field1"),
+                Err("error2", "Field2"),
+                Err("error3", "Field3")
+            });
+
+            // Act
+            var response = sut.ToApiResponse(null, "validation failed");
+
+            // Assert
+            Assert.False(response.IsSuccess);
+            Assert.NotNull(response.Errors);
+            Assert.Equal(3, response.Errors!.Length);
+            Assert.Equal("Field1", response.Errors![0].PropertyName);
+            Assert.Equal("error1", response.Errors![0].Message);
+            Assert.Equal("Field2", response.Errors![1].PropertyName);
+            Assert.Equal("error2", response.Errors![1].Message);
+            Assert.Equal("Field3", response.Errors![2].PropertyName);
+            Assert.Equal("error3", response.Errors![2].Message);
+        }
     }
 
     public class ToActionResult

@@ -12,11 +12,18 @@ public static class ResultApiExtensions
     /// </summary>
     public static ApiResponse<T> ToApiResponse<T>(this Result<T> result, string? successMessage = null, string? failureMessage = null)
     {
-        return result.IsSuccess
-            ? ApiResponse<T>.Success(result.Value, successMessage)
-            : ApiResponse<T>.Failure(
-                result.Errors.ToArray().Select(e => new ApiError(e.Message, e.PropertyName)),
-                failureMessage);
+        if (result.IsSuccess)
+            return ApiResponse<T>.Success(result.Value, successMessage);
+
+        // Optimize: iterate span directly instead of ToArray() + LINQ Select()
+        var errors = result.Errors;
+        var apiErrors = new ApiError[errors.Length];
+        for (int i = 0; i < errors.Length; i++)
+        {
+            apiErrors[i] = new ApiError(errors[i].Message, errors[i].PropertyName);
+        }
+
+        return ApiResponse<T>.Failure(apiErrors, failureMessage);
     }
 
     /// <summary>

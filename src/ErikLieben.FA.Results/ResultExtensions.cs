@@ -39,10 +39,12 @@ public static class ResultExtensions
         if (result.IsSuccess)
             return result;
 
-        var mappedErrors = new ValidationError[result.Errors.Length];
-        for (int i = 0; i < result.Errors.Length; i++)
+        // Optimize: iterate span directly and create array with exact size
+        var errors = result.Errors;
+        var mappedErrors = new ValidationError[errors.Length];
+        for (int i = 0; i < errors.Length; i++)
         {
-            mappedErrors[i] = errorMapper(result.Errors[i]);
+            mappedErrors[i] = errorMapper(errors[i]);
         }
 
         return Result<T>.Failure(mappedErrors);
@@ -58,15 +60,17 @@ public static class ResultExtensions
         if (result.IsSuccess)
             return result;
 
-        var filteredErrors = new List<ValidationError>();
-        foreach (var error in result.Errors)
+        // Optimize: use List with proper initial capacity to reduce allocations
+        var errors = result.Errors;
+        var filteredErrors = new List<ValidationError>(errors.Length);
+        foreach (var error in errors)
         {
             if (predicate(error))
                 filteredErrors.Add(error);
         }
 
         return filteredErrors.Count == 0
-            ? Result<T>.Success(default!) // This is a bit odd, but maintains the pattern
+            ? Result<T>.Success(default!)
             : Result<T>.Failure(filteredErrors.ToArray());
     }
 
@@ -82,21 +86,29 @@ public static class ResultExtensions
     /// Gets all error messages as a single string
     /// </summary>
     public static string GetErrorMessages<T>(this Result<T> result, string separator = "; ")
-    {
-        if (result.IsSuccess)
-            return string.Empty;
-
-        return string.Join(separator, result.Errors.ToArray().Select(e => e.ToString()));
-    }
+        => result.IsSuccess ? string.Empty : FormatErrors(result.Errors, separator);
 
     /// <summary>
     /// Gets all error messages as a single string (non-generic)
     /// </summary>
     public static string GetErrorMessages(this Result result, string separator = "; ")
+        => result.IsSuccess ? string.Empty : FormatErrors(result.Errors, separator);
+
+    private static string FormatErrors(ReadOnlySpan<ValidationError> errors, string separator)
     {
-        if (result.IsSuccess)
+        if (errors.Length == 0)
             return string.Empty;
 
-        return string.Join(separator, result.Errors.ToArray().Select(e => e.ToString()));
+        if (errors.Length == 1)
+            return errors[0].ToString();
+
+        // Optimize: iterate span directly without ToArray() + LINQ
+        var messages = new string[errors.Length];
+        for (int i = 0; i < errors.Length; i++)
+        {
+            messages[i] = errors[i].ToString();
+        }
+
+        return string.Join(separator, messages);
     }
 }
