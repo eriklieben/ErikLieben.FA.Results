@@ -86,36 +86,16 @@ public static class ResultExtensions
     /// Gets all error messages as a single string
     /// </summary>
     public static string GetErrorMessages<T>(this Result<T> result, string separator = "; ")
-    {
-        if (result.IsSuccess)
-            return string.Empty;
-
-        var errors = result.Errors;
-        if (errors.Length == 0)
-            return string.Empty;
-
-        if (errors.Length == 1)
-            return errors[0].ToString();
-
-        // Optimize: iterate span directly without ToArray() + LINQ
-        var messages = new string[errors.Length];
-        for (int i = 0; i < errors.Length; i++)
-        {
-            messages[i] = errors[i].ToString();
-        }
-
-        return string.Join(separator, messages);
-    }
+        => result.IsSuccess ? string.Empty : FormatErrors(result.Errors, separator);
 
     /// <summary>
     /// Gets all error messages as a single string (non-generic)
     /// </summary>
     public static string GetErrorMessages(this Result result, string separator = "; ")
-    {
-        if (result.IsSuccess)
-            return string.Empty;
+        => result.IsSuccess ? string.Empty : FormatErrors(result.Errors, separator);
 
-        var errors = result.Errors;
+    private static string FormatErrors(ReadOnlySpan<ValidationError> errors, string separator)
+    {
         if (errors.Length == 0)
             return string.Empty;
 
