@@ -232,6 +232,34 @@ public class ResultExtensionsTests
         }
 
         [Fact]
+        public void Should_map_multiple_errors_correctly()
+        {
+            // Arrange - Test optimized array iteration with multiple errors
+            var sut = Result<int>.Failure(new[]
+            {
+                Err("error1", "Field1"),
+                Err("error2", "Field2"),
+                Err("error3", "Field3"),
+                Err("error4", "Field4")
+            });
+
+            // Act
+            var result = sut.MapErrors(e => new ValidationError($"[MAPPED] {e.Message}", e.PropertyName));
+
+            // Assert
+            Assert.True(result.IsFailure);
+            Assert.Equal(4, result.Errors.Length);
+            Assert.Equal("[MAPPED] error1", result.Errors[0].Message);
+            Assert.Equal("Field1", result.Errors[0].PropertyName);
+            Assert.Equal("[MAPPED] error2", result.Errors[1].Message);
+            Assert.Equal("Field2", result.Errors[1].PropertyName);
+            Assert.Equal("[MAPPED] error3", result.Errors[2].Message);
+            Assert.Equal("Field3", result.Errors[2].PropertyName);
+            Assert.Equal("[MAPPED] error4", result.Errors[3].Message);
+            Assert.Equal("Field4", result.Errors[3].PropertyName);
+        }
+
+        [Fact]
         public void Should_throw_when_mapper_null()
         {
             // Arrange
@@ -287,6 +315,30 @@ public class ResultExtensionsTests
             Assert.True(result.IsFailure);
             Assert.Single(result.Errors.ToArray());
             Assert.Equal("b", result.Errors[0].Message);
+        }
+
+        [Fact]
+        public void Should_filter_multiple_errors_with_proper_capacity()
+        {
+            // Arrange - Test optimized List with proper initial capacity
+            var sut = Result<int>.Failure(new[]
+            {
+                Err("keep1", "Field1"),
+                Err("remove", "Field2"),
+                Err("keep2", "Field3"),
+                Err("remove", "Field4"),
+                Err("keep3", "Field5")
+            });
+
+            // Act
+            var result = sut.FilterErrors(e => e.Message.StartsWith("keep"));
+
+            // Assert
+            Assert.True(result.IsFailure);
+            Assert.Equal(3, result.Errors.Length);
+            Assert.Equal("keep1", result.Errors[0].Message);
+            Assert.Equal("keep2", result.Errors[1].Message);
+            Assert.Equal("keep3", result.Errors[2].Message);
         }
 
         [Fact]
@@ -349,6 +401,19 @@ public class ResultExtensionsTests
         }
 
         [Fact]
+        public void Should_use_fast_path_for_single_error_generic()
+        {
+            // Arrange - Test optimized single-error fast path
+            var sut = Result<int>.Failure(Err("single error", "Field"));
+
+            // Act
+            var result = sut.GetErrorMessages();
+
+            // Assert
+            Assert.Equal("Field: single error", result);
+        }
+
+        [Fact]
         public void Should_join_errors_for_failure_generic()
         {
             // Arrange
@@ -375,6 +440,19 @@ public class ResultExtensionsTests
         }
 
         [Fact]
+        public void Should_use_fast_path_for_single_error_nongeneric()
+        {
+            // Arrange - Test optimized single-error fast path
+            var sut = Result.Failure(Err("single error", "Field"));
+
+            // Act
+            var result = sut.GetErrorMessages();
+
+            // Assert
+            Assert.Equal("Field: single error", result);
+        }
+
+        [Fact]
         public void Should_join_errors_for_failure_nongeneric()
         {
             // Arrange
@@ -385,6 +463,19 @@ public class ResultExtensionsTests
 
             // Assert
             Assert.Equal("A: a | B: b", result);
+        }
+
+        [Fact]
+        public void Should_handle_error_without_property_name()
+        {
+            // Arrange
+            var sut = Result<int>.Failure(Err("error without property"));
+
+            // Act
+            var result = sut.GetErrorMessages();
+
+            // Assert
+            Assert.Equal("error without property", result);
         }
     }
 }
