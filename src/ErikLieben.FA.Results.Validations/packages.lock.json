@@ -4,9 +4,9 @@
     "net10.0": {
       "ErikLieben.FA.Specifications": {
         "type": "Direct",
-        "requested": "[1.0.6, )",
-        "resolved": "1.0.6",
-        "contentHash": "jkccVdvsUv6dxRMcH3WHei/oxDrPIGLap8kv21IFR6X7STNqXglUjod0czYxKFPf6Y8cwhowRjQb+7xeQpRjIw=="
+        "requested": "[1.0.8, )",
+        "resolved": "1.0.8",
+        "contentHash": "FOO63Ic6OlZn+3JgOvkgjeWNEG3NXe8V+N0u41kuS0sx+eV6jO3ofKtr8E9rW0Pc9W1kx+x4UQTZPib4LFb52A=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
