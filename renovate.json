@@ -1,5 +1,6 @@
 {
   "baseBranches": ["main"],
+  "postUpdateOptions": ["nugetRollupLockFiles"],
   "packageRules": [
     {
       "description": "Latest .NET for main branch",
