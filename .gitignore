@@ -87,3 +87,7 @@ artifacts/
 *.aspnetcache/
 
 node_modules
+
+# Build artifacts
+release-artifacts/
+coverage/
