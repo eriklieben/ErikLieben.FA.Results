@@ -2,8 +2,8 @@
 
 [![NuGet](https://img.shields.io/nuget/v/ErikLieben.FA.Results?style=flat-square)](https://www.nuget.org/packages/ErikLieben.FA.Results)
 [![Changelog](https://img.shields.io/badge/Changelog-releases-informational?style=flat-square)](https://github.com/eriklieben/ErikLieben.FA.Results/releases)
-[![.NET 10.0](https://img.shields.io/badge/.NET-10.0-blue?style=flat-square)](https://dotnet.microsoft.com/download/dotnet/10.0)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/eriklieben/ErikLieben.FA.Results/badge)](https://scorecard.dev/viewer/?uri=github.com/eriklieben/ErikLieben.FA.Results)
+[![.NET 8.0 | 9.0 | 10.0](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-blue?style=flat-square)](https://dotnet.microsoft.com)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eriklieben_ErikLieben.FA.Results&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eriklieben_ErikLieben.FA.Results)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=eriklieben_ErikLieben.FA.Results&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=eriklieben_ErikLieben.FA.Results)
@@ -40,7 +40,7 @@ Perfect for **domain modeling**, collecting validation errors, and consistent AP
 dotnet add package ErikLieben.FA.Results
 ```
 
-**Requirements:** .NET 9.0+
+**Requirements:** .NET 8.0+
 
 ## 🗂️ Core Concepts
 
