@@ -29,7 +29,7 @@ public class ValidationBuilder<T> : IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    public IValidationBuilder<T> ValidateWith<TSpec>(object value, string message, [CallerArgumentExpression(nameof(value))]string? propertyName = null)
+    public IValidationBuilder<T> ValidateWith<TSpec>(object value, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null)
         where TSpec : Specification<object>, new()
     {
         var spec = new TSpec();
@@ -136,7 +136,7 @@ public class ValidationBuilder<T> : IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    public IValidationBuilder<T> ValidateNotNullOrEmpty(string? value, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null)
+    public IValidationBuilder<T> ValidateNotNullOrEmpty(string? value, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null)
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -153,7 +153,7 @@ public class ValidationBuilder<T> : IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    public IValidationBuilder<T> ValidateNotNullOrWhiteSpace(string? value, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null)
+    public IValidationBuilder<T> ValidateNotNullOrWhiteSpace(string? value, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -173,7 +173,7 @@ public class ValidationBuilder<T> : IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    public IValidationBuilder<T> ValidateRange<TValue>(TValue value, TValue min, TValue max, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null)
+    public IValidationBuilder<T> ValidateRange<TValue>(TValue value, TValue min, TValue max, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null)
         where TValue : IComparable<TValue>
     {
         if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
@@ -193,7 +193,7 @@ public class ValidationBuilder<T> : IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    public IValidationBuilder<T> ValidateStringLength(string? value, int minLength, int maxLength, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null)
+    public IValidationBuilder<T> ValidateStringLength(string? value, int minLength, int maxLength, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null)
     {
         if (value is null || value.Length < minLength || value.Length > maxLength)
         {

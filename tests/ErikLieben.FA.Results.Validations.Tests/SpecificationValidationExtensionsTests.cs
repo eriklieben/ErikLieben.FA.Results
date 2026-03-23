@@ -70,7 +70,7 @@ public class SpecificationValidationExtensionsTests
             Specification<int> sut = null!;
 
             // Act
-            Func<System.Collections.Generic.IEnumerable<Result<int>>> act = () => sut.ValidateMany(new[] {1}, "msg");
+            Func<System.Collections.Generic.IEnumerable<Result<int>>> act = () => sut.ValidateMany(new[] { 1 }, "msg");
 
             // Assert
             Assert.Throws<ArgumentNullException>(() => act());

@@ -25,7 +25,7 @@ public interface IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    IValidationBuilder<T> ValidateWith<TSpec>(object value, string message, [CallerArgumentExpression(nameof(value))]string? propertyName = null)
+    IValidationBuilder<T> ValidateWith<TSpec>(object value, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null)
         where TSpec : Specification<object>, new();
 
     /// <summary>
@@ -90,7 +90,7 @@ public interface IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    IValidationBuilder<T> ValidateNotNullOrEmpty(string? value, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null);
+    IValidationBuilder<T> ValidateNotNullOrEmpty(string? value, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null);
 
     /// <summary>
     /// Validates that a string is not null, empty, or whitespace
@@ -99,7 +99,7 @@ public interface IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    IValidationBuilder<T> ValidateNotNullOrWhiteSpace(string? value, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null);
+    IValidationBuilder<T> ValidateNotNullOrWhiteSpace(string? value, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null);
 
     /// <summary>
     /// Validates that a value is within a specified range
@@ -111,7 +111,7 @@ public interface IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    IValidationBuilder<T> ValidateRange<TValue>(TValue value, TValue min, TValue max, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null)
+    IValidationBuilder<T> ValidateRange<TValue>(TValue value, TValue min, TValue max, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null)
         where TValue : IComparable<TValue>;
 
     /// <summary>
@@ -123,7 +123,7 @@ public interface IValidationBuilder<T>
     /// <param name="message">The error message if validation fails</param>
     /// <param name="propertyName">Optional property name for the error</param>
     /// <returns>The builder for fluent chaining</returns>
-    IValidationBuilder<T> ValidateStringLength(string? value, int minLength, int maxLength, string message,[CallerArgumentExpression(nameof(value))] string? propertyName = null);
+    IValidationBuilder<T> ValidateStringLength(string? value, int minLength, int maxLength, string message, [CallerArgumentExpression(nameof(value))] string? propertyName = null);
 
     /// <summary>
     /// Validates that a collection is not null or empty

@@ -91,3 +91,9 @@ node_modules
 # Build artifacts
 release-artifacts/
 coverage/
+
+# Agentic workflow - personal context
+context/USER.md
+context/MEMORY.md
+context/memory/
+CLAUDE.local.md
